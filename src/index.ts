@@ -1,18 +1,23 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `npm run dev` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `npm run deploy` to publish your worker
- *
- * Bind resources to your worker in `wrangler.toml`. After adding bindings, a type definition for the
- * `Env` object can be regenerated with `npm run cf-typegen`.
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
+import { Ai } from '@cloudflare/ai';
+import { Hono } from 'hono';
+import steamRoutes from './api/resources/steam';
+import translateRoutes from './api/resources/translate';
 
-export default {
-	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-		return new Response('Hello World!');
-	},
-};
+export type Env = {
+  AI: Ai;
+	BASE_URL: string;
+	KEY: string;
+	SteamID: string;
+}
+
+const app = new Hono<{Bindings: Env}>();
+
+app.route("/", translateRoutes);
+app.route("/", steamRoutes);
+
+app.get('/', (c) => {
+	return c.text('Hello world, maitzeth');
+});
+
+export default app;
+ 

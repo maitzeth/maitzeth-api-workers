@@ -1,4 +1,6 @@
-## 
+## Maitzeth Hono APIs
+
+This is just an small repo to share how to deploy Workers to cloudflare using Hono framework.
 
 ## Routes
 
